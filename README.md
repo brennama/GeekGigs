@@ -1,2 +1,5 @@
-# geekgigs
-MET CS 633
+MET CSS 633
+===========
+
+GeekGigs Web Application
+------------------------

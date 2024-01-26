@@ -1,0 +1,179 @@
+#!/usr/local/bin/php
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Require defined constants.
+ */
+require_once dirname(__DIR__).'/constants.php';
+
+/**
+ * Define CLI options
+ */
+const SHORTOPTS = '';
+const LONGOPTS = [
+    'env:',
+    'help',
+    'no-ansi',
+    'no-env',
+    'no-install',
+    'quiet',
+    'verbose',
+];
+$requiredOptions = [
+    'env' => sprintf('Environment flag [%s, %s]', ENV_DEV, ENV_PROD),
+];
+$availableOptions = [
+    'help' => 'Display this help message',
+    'no-ansi' => 'No ANSI output',
+    'no-env' => sprintf('Do not copy .env file to project root [%s]', ENV_DEV),
+    'no-install' => sprintf('Do not install composer dependencies [%s]', ENV_DEV),
+    'quiet' => 'Do not output any message',
+    'verbose' => 'Increase the verbosity of messages',
+];
+
+// Get CLI arguments
+$args = getopt(SHORTOPTS, LONGOPTS);
+$help = empty($args) && $argc === 1;
+$env = null;
+
+/**
+ * Check for CLI flags
+ */
+foreach (array_keys($availableOptions) as $option) {
+    $args[$option] = array_key_exists($option, $args);
+}
+
+/**
+ * Display help if flag is present
+ */
+if ($help || $args['help']) {
+    $displayOptions = static function (string $message, array $options, string $ansi): void {
+        output(message: $message, ansi:CLI_BOLD, startNewLine: true);
+
+        $output = static function (string $description, string $option) use ($ansi): void {
+            if (str_contains($description, '[')) {
+                $matches = [];
+                preg_match('/\[.+]/', $description, $matches);
+                $description = str_replace($matches[0], $ansi.$matches[0].CLI_RESET_ALL, $description);
+            }
+
+            output(message: ' --'.str_pad($option, 10), ansi: $ansi, endNewLine: false);
+            output(message: "\t$description");
+        };
+
+        array_walk($options, $output);
+    };
+
+    $displayOptions('Required Options', $requiredOptions, CLI_YELLOW);
+    $displayOptions('Available Options', $availableOptions, CLI_GREEN);
+    die(PHP_EOL);
+}
+
+/**
+ * Validate CLI arguments.
+ */
+foreach ($requiredOptions as $option => $description) {
+    if (!array_key_exists($option, $args)) {
+        output(message: "$description is required", ansi: CLI_BOLD.CLI_YELLOW, die: true);
+    }
+
+    if ($option === 'env' && !in_array($env = $args['env'], ENVIRONMENTS, true)) {
+        output(message: "$env is not a valid environment", ansi: CLI_BOLD.CLI_RED, die: true);
+    }
+}
+
+/**
+ * Display environment information.
+ */
+if ($args['verbose']) {
+    output(message: "Building $env environment", ansi: CLI_BOLD.CLI_BLUE);
+}
+
+/**
+ * Move environment-based .env file to project DIR_ROOT
+ */
+if (!$args['no-env']) {
+    if (file_exists($envFile = DIR_ENV . "/$env.env")) {
+        if ($args['verbose']) {
+            output(message: "File $envFile located", ansi: CLI_BOLD.CLI_GREEN);
+        }
+    } else {
+        output(message: "Failed to locate $envFile", ansi: CLI_BOLD.CLI_RED, die: true);
+    }
+
+    if (copy($envFile, $rootDir = DIR_ROOT . '/.env')) {
+        if ($args['verbose']) {
+            output(message: "File $envFile copied to $rootDir", ansi: CLI_BOLD.CLI_GREEN);
+        }
+    } else {
+        output(message: "Failed to copy $envFile", ansi: CLI_BOLD.CLI_RED, die: true);
+    }
+}
+
+/**
+ * Install composer.
+ */
+if (!$args['no-install']) {
+    if ($args['verbose']) {
+        output(message: 'Running composer install', ansi: CLI_BOLD.CLI_GREEN);
+    }
+
+    $composerOptions = '';
+
+    if ($env !== ENV_DEV) {
+        $composerOptions .= ' --no-ansi --no-interaction --optimize-autoloader';
+    }
+
+    if ($env === ENV_PROD) {
+        $composerOptions .= ' --no-dev';
+    }
+
+    execute('composer install --profile'.$composerOptions);
+}
+
+/**
+ * Execute command.
+ */
+function execute(string $command): void
+{
+    global $args;
+
+    if ($args['quiet']) {
+        $command .= ' --quiet';
+    }
+
+    if ($args['verbose']) {
+        output($command);
+        $command .= ' --verbose';
+    }
+
+    system($command);
+}
+
+/**
+ * Output messages.
+ */
+function output(string $message, string $ansi = '', $startNewLine = false, $endNewLine = true, $die = false): void
+{
+    global $args;
+
+    if (!$args['no-ansi'] && !empty($ansi)) {
+        $message = $ansi.$message.CLI_RESET_ALL;
+    }
+
+    if ($startNewLine) {
+        $message = PHP_EOL . $message;
+    }
+
+    if ($endNewLine) {
+        $message .= PHP_EOL;
+    }
+
+    if ($die) {
+        die($message);
+    }
+
+    echo $message;
+}

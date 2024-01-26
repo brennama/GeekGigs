@@ -33,7 +33,7 @@ cd /var/www/html
 # Ensure your working directory is /var/www/html
 pwd
 
-# Make sure your public SSH key has been added to GitHub
+# clone repo from github
 git clone git@github.com:bgordenBU/geekgigs.git
 
 # Change into project directory

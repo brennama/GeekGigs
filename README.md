@@ -13,7 +13,7 @@ GeekGigs Web Application
 - Confirm Docker is running by clicking the Docker icon in the menu bar.
 
 ### Clone the Repository
-- Open a new terminal (or iTerm) window or tab.
+- Open a new terminal window (or tab).
 - Create the following local directory if it does not already exist:
 
 ```
@@ -41,7 +41,7 @@ cd geekgigs
 ```
 
 ### Bring Up Docker Containers
-- Open a new terminal (or iTerm) window or tab.
+- Open a new terminal window (or tab).
 - Change working directory to the following path:
 
 ```
@@ -64,7 +64,7 @@ docker compose up
 **See below for more helpful Docker commands.**
 
 ### Run the Application Build Script
-- Open a new terminal (or iTerm) window or tab.
+- Open a new terminal window (or tab).
 - Execute a command on the app container:
 
 ```
@@ -101,7 +101,7 @@ exit
 - In your browser, navigate to http://localhost:8080.
 
 #### cURL
-- Open a new terminal (or iTerm) window or tab.
+- Open a new terminal window (or tab).
 - Execute one of the following cURL commands:
 
 ```
@@ -122,15 +122,7 @@ curl -XGET -H 'Accept: application/json' 'http://localhost:8080/api/jobs' | pyth
 ### Application Build Script Notes
 - The build script is intended to be executed inside the `app` container. 
 However, the script will work locally if you install `composer` on your local machine
-by executing the following commands:
-
-```
-# https://getcomposer.org/download/
-php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-php -r "if (hash_file('sha384', 'composer-setup.php') === 'e21205b207c3ff031906575712edab6f13eb0b361f2085f1f1237b7126d785e826a450292b6cfd1d64d92e6563bbde02') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-php composer-setup.php
-php -r "unlink('composer-setup.php');"
-```
+by [downloading composer](https://getcomposer.org/download/).
 
 - Move `composer.phar` into a directory on your **PATH**, so you can call `composer` from any directory:
 
@@ -140,7 +132,7 @@ sudo mv composer.phar /usr/local/bin/composer
 
 - Now you are able to execute the build script locally instead of 
 having to execute commands on the `app` container.
-Open a terminal (or iTerm) window or tab, and execute the following commands:
+Open a terminal window (or tab), and execute the following commands:
 
 ```
 # change to local project directory

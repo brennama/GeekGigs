@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\JobController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\JobController;
+use App\Http\Controllers\Api\SearchController;
+use App\Http\Controllers\Api\TagController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,17 +17,40 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-const PATH_JOBS = '/jobs';
-const PATH_JOBS_ID = '/jobs/{id}';
-
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
-
 Route::controller(JobController::class)->group(function () {
-    Route::get(PATH_JOBS, 'index');
-    Route::get(PATH_JOBS_ID, 'show');
-    Route::post(PATH_JOBS, 'store');
-    Route::put(PATH_JOBS_ID, 'update');
-    Route::delete(PATH_JOBS_ID, 'destroy');
+    $uri = '/jobs';
+    $param = '{id}';
+
+    Route::get($uri, 'index');
+    Route::get("$uri/$param", 'show');
+    Route::post($uri, 'store');
+    Route::put("$uri/$param", 'update');
+    Route::delete("$uri/$param", 'destroy');
+});
+
+Route::controller(SearchController::class)->group(function () {
+    Route::get('/search', 'index');
+});
+
+Route::get('/search', [SearchController::class, 'show']);
+
+Route::controller(TagController::class)->group(function () {
+    $uri = '/tags';
+    $param = '{id}';
+
+    Route::get($uri, 'index');
+    Route::get("$uri/$param", 'show');
+    Route::post($uri, 'store');
+    Route::put("$uri/$param", 'update');
+    Route::delete("$uri/$param", 'destroy');
+});
+
+Route::controller(UserController::class)->group(function () {
+    $uri = '/users';
+    $param = '{id}';
+
+    Route::get("$uri/$param", 'show');
+    Route::post($uri, 'store');
+    Route::put("$uri/$param", 'update');
+    Route::delete("$uri/$param", 'destroy');
 });

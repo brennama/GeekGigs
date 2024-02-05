@@ -120,25 +120,16 @@ curl -XGET -H 'Accept: application/json' 'http://localhost:8080/api/jobs' | pyth
 ---
 
 ### Application Build Script Notes
-- The build script is intended to be executed inside the `app` container. 
-However, the script will work locally if you install `composer` on your local machine
-by [downloading composer](https://getcomposer.org/download/).
-
-- Move `composer.phar` into a directory on your **PATH**, so you can call `composer` from any directory:
+:warning: The build script must be executed inside the `app` container.
 
 ```
-sudo mv composer.phar /usr/local/bin/composer
-```
+# Access container shell
+docker exec -it app /bin/sh
 
-- Now you are able to execute the build script locally instead of 
-having to execute commands on the `app` container.
-Open a terminal window (or tab), and execute the following commands:
-
-```
-# change to local project directory
+# Once inside the container, change directory
 cd /var/www/html/geekgigs
 
-# run build script
+# Execute build script for dev environment
 php bin/build --env dev
 ```
 ---
@@ -169,6 +160,9 @@ docker ps
 
 # View container logs
 docker logs -f <CONTAINER ID>
+
+# Access container shell
+docker exec -it <NAME> /bin/sh
 
 # Prune docker data
 docker system prune --all

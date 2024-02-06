@@ -28,17 +28,6 @@ Route::controller(JobController::class)->group(function () {
     Route::delete("$uri/$param", 'destroy');
 });
 
-Route::controller(TagController::class)->group(function () {
-    $uri = '/tags';
-    $param = '{tag}';
-
-    Route::get($uri, 'index');
-    Route::get("$uri/$param", 'show');
-    Route::post($uri, 'store');
-    Route::put("$uri/$param", 'update');
-    Route::delete("$uri/$param", 'destroy');
-});
-
 Route::controller(UserController::class)->group(function () {
     $uri = '/users';
     $param = '{user}';
@@ -47,8 +36,4 @@ Route::controller(UserController::class)->group(function () {
     Route::post($uri, 'store');
     Route::put("$uri/$param", 'update');
     Route::delete("$uri/$param", 'destroy');
-});
-
-Route::controller(SearchController::class)->group(function () {
-    Route::get('/search', 'show');
 });

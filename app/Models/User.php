@@ -4,13 +4,31 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * Class User
+ *
+ * @package App\Models
+ */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'certifications' => [],
+        'education' => [],
+        'experience' => [],
+        'tags' => [],
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -18,9 +36,21 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'active',
+        'first_name',
+        'last_name',
+        'profile_name',
         'email',
+        'email_verified_at',
         'password',
+        'remember_token',
+        'phone',
+        'about',
+        // json columns
+        'certifications->enabled',
+        'education->enabled',
+        'experience->enabled',
+        'tags->enabled',
     ];
 
     /**
@@ -42,4 +72,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Get whether user is active.
+     */
+    public function isActive(): bool
+    {
+        return (bool) $this->getAttribute('active');
+    }
 }

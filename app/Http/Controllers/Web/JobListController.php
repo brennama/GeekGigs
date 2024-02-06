@@ -13,6 +13,11 @@ class JobController extends Controller
 {
     public function show()
     {
+        // fetch jobs from elasticsearch
+        $jobs = [];
 
+        return view('jobs', [
+            'jobs' => $jobs,
+        ]);
     }
 }

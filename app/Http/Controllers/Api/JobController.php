@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
+use App\Repositories\JobRepository;
+use Elastic\Elasticsearch\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,14 +17,22 @@ use Illuminate\Http\Request;
  */
 class JobController extends Controller
 {
+    private JobRepository $repository;
+
+    /**
+     * JobController constructor.
+     */
+    public function __construct(Client $client)
+    {
+        $this->repository = new JobRepository($client);
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(): JsonResponse
     {
-        return response()->json([
-           'foo' => 'bar',
-        ]);
+        return $this->show(1);
     }
 
     /**
@@ -36,9 +46,15 @@ class JobController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $id): JsonResponse
     {
-        //
+        $job = $this->repository->find($id);
+
+        if ($job === null) {
+            return response()->json(status: 404);
+        }
+
+        return response()->json($job->toArray());
     }
 
     /**

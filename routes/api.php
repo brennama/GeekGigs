@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(JobController::class)->group(function () {
     $uri = '/jobs';
-    $param = '{id}';
+    $param = '{job}';
 
     Route::get($uri, 'index');
     Route::get("$uri/$param", 'show');
@@ -28,15 +28,9 @@ Route::controller(JobController::class)->group(function () {
     Route::delete("$uri/$param", 'destroy');
 });
 
-Route::controller(SearchController::class)->group(function () {
-    Route::get('/search', 'index');
-});
-
-Route::get('/search', [SearchController::class, 'show']);
-
 Route::controller(TagController::class)->group(function () {
     $uri = '/tags';
-    $param = '{id}';
+    $param = '{tag}';
 
     Route::get($uri, 'index');
     Route::get("$uri/$param", 'show');
@@ -47,10 +41,14 @@ Route::controller(TagController::class)->group(function () {
 
 Route::controller(UserController::class)->group(function () {
     $uri = '/users';
-    $param = '{id}';
+    $param = '{user}';
 
     Route::get("$uri/$param", 'show');
     Route::post($uri, 'store');
     Route::put("$uri/$param", 'update');
     Route::delete("$uri/$param", 'destroy');
+});
+
+Route::controller(SearchController::class)->group(function () {
+    Route::get('/search', 'show');
 });

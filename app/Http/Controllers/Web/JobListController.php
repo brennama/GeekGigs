@@ -3,21 +3,20 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 /**
- * Class JobController
+ * Class JobListController
  *
  * @package App\Http\Controllers\Web
  */
-class JobController extends Controller
+class JobListController extends Controller
 {
-    public function show()
+    /**
+     * Show job listings.
+     */
+    public function show(): View
     {
-        // fetch jobs from elasticsearch
-        $jobs = [];
-
-        return view('jobs', [
-            'jobs' => $jobs,
-        ]);
+        return view('job-list');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 /**
  * Class HomeController
@@ -11,8 +12,11 @@ use App\Http\Controllers\Controller;
  */
 class HomeController extends Controller
 {
-    public function show()
+    /**
+     * Show home page.
+     */
+    public function show(): View
     {
-        return view('welcome');
+        return view('home');
     }
 }

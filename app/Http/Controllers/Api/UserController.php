@@ -19,7 +19,11 @@ class UserController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        //
+        $user = new User();
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->profile_name = $request->profile_name;
+        $user->email = $request->email;
     }
 
     /**
@@ -27,7 +31,7 @@ class UserController extends Controller
      */
     public function show(User $user): JsonResponse
     {
-        //
+        return response()->json($user);
     }
 
     /**
@@ -35,7 +39,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user): JsonResponse
     {
-        //
+        return response()->json($user);
     }
 
     /**
@@ -43,6 +47,10 @@ class UserController extends Controller
      */
     public function destroy(User $user): JsonResponse
     {
-        //
+        if ($user->exists) {
+            $user->delete();
+        }
+
+        return response()->json();
     }
 }

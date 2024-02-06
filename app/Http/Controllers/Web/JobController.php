@@ -3,16 +3,24 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 /**
- * Class JobController
+ * Class JobListController
  *
  * @package App\Http\Controllers\Web
  */
-class JobController extends Controller
+class JobListController extends Controller
 {
-    public function show()
+    /**
+     * Show job listings.
+     */
+    public function show(): View
     {
+<<<<<<< Updated upstream:app/Http/Controllers/Web/JobController.php
 
+=======
+        return view('job-list');
+>>>>>>> Stashed changes:app/Http/Controllers/Web/JobListController.php
     }
 }

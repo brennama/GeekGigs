@@ -63,7 +63,7 @@ docker compose up
 
 **See below for more helpful Docker commands.**
 
-### Run the Application Build Script
+### Run the Build Script and Seed Databases
 - Open a new terminal window (or tab).
 - Execute a command on the app container:
 
@@ -89,6 +89,12 @@ php bin/build --env dev
 php bin/build --help
 ```
 
+- Run database migration and seeder scripts:
+
+```
+php artisan migrate:refresh --seed
+```
+
 - Optionally exit the container:
 
 ```
@@ -98,7 +104,7 @@ exit
 ### Run the Application
 
 #### Browser
-- In your browser, navigate to http://localhost:8080.
+- In your browser, navigate to http://localhost:8080/login.
 
 #### cURL
 - Open a new terminal window (or tab).
@@ -106,16 +112,16 @@ exit
 
 ```
 # Get JSON response (implicit)
-curl 'http://localhost:8080/api/jobs'
+curl 'http://localhost:8080/api/users/1'
 
 # Get JSON response (explicit)
-curl -XGET -H 'Accept: application/json' 'http://localhost:8080/api/jobs'
+curl -XGET -H 'Accept: application/json' 'http://localhost:8080/api/users/1'
 
 # Get JSON response with header information
-curl -XGET -i -H 'Accept: application/json' 'http://localhost:8080/api/jobs'
+curl -XGET -i -H 'Accept: application/json' 'http://localhost:8080/api/users/1'
 
 # Get formatted JSON response (requires Python3, which Mac should include)
-curl -XGET -H 'Accept: application/json' 'http://localhost:8080/api/jobs' | python3 -m json.tool
+curl -XGET -H 'Accept: application/json' 'http://localhost:8080/api/users/1' | python3 -m json.tool
 ```
 ---
 

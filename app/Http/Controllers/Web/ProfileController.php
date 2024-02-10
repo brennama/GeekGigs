@@ -19,13 +19,16 @@ class ProfileController extends Controller
      */
     public function show(): View|RedirectResponse
     {
-        // Middleware should take care of this
+        // Todo: Review this logic; middleware should take care of this
         if (!Auth::check()) {
             return redirect('/login');
         }
 
+        $user = Auth::user();
+        $user->tags = json_decode($user->tags, true);
+
         return view('profile', [
-            'user' => Auth::user(),
+            'user' => $user,
         ]);
     }
 

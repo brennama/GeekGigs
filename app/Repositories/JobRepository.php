@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Models\Job;
-use Elastic\Elasticsearch\Client;
 use Throwable;
 
 /**
@@ -13,38 +12,30 @@ use Throwable;
  *
  * @package App\Repositories
  */
-class JobRepository
+class JobRepository extends DocumentRepository
 {
-    /**
-     * JobRepository constructor.
-     */
-    public function __construct(private readonly Client $client)
-    {
-
-    }
-
     /**
      * Retrieve document by its id.
      *
      * @throws Throwable
      */
-    public function find(int|string $id): ?Job
+    public function find(string $id): ?Job
     {
         try {
             $response = $this->client->get([
                 'index' => 'jobs',
-                'id' => (int) $id,
+                'id' => $id,
             ]);
 
             if ($response->getStatusCode() === 404) {
                 return null;
             }
 
-            $decoded = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
-            $job = $decoded['_source'];
-            $job['id'] = $decoded['_id'];
+            $decoded = $this->decode($response);
+            $source = $decoded['_source'];
+            $source['id'] = $decoded['_id'];
 
-            return Job::hydrate($job);
+            return Job::fromArray($source);
         } catch (Throwable) {
             return null;
         }
@@ -55,13 +46,14 @@ class JobRepository
      *
      * @throws Throwable
      */
-    public function save(Job $model): bool
+    public function save(Job $model): void
     {
-        $this->client->index([
+        $response = $this->client->index([
             'index' => 'jobs',
             'body' => $model->toArray(),
         ]);
 
-        return true;
+        $decoded = $this->decode($response);
+        $model->id = $decoded['_id'];
     }
 }

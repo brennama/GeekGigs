@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\JobController;
-use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -21,7 +20,7 @@ Route::controller(JobController::class)->group(function () {
     $uri = '/jobs';
     $param = '{job}';
 
-    Route::get($uri, 'index');
+    Route::get($uri, 'search');
     Route::get("$uri/$param", 'show');
     Route::post($uri, 'store');
     Route::put("$uri/$param", 'update');
@@ -36,4 +35,8 @@ Route::controller(UserController::class)->group(function () {
     Route::post($uri, 'store');
     Route::put("$uri/$param", 'update');
     Route::delete("$uri/$param", 'destroy');
+});
+
+Route::controller(TagController::class)->group(function () {
+    Route::get('/tags', 'search');
 });

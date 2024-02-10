@@ -17,6 +17,7 @@ RUN a2enmod rewrite
 COPY conf/php.ini /usr/local/etc/php/
 
 RUN docker-php-ext-install \
+#    imap \
     mysqli \
     pdo \
     pdo_mysql

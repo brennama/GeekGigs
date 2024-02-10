@@ -22,10 +22,16 @@ class UserSeeder extends Seeder
         User::insert([
             'first_name' => 'brett',
             'last_name' => 'gorden',
-            'profile_name' => 'nedrog',
             'email' => 'bgorden@bu.edu',
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
+            'tags' => json_encode([
+                ['id' => 1, 'label' => 'javascript'],
+                ['id' => 5, 'label' => 'php'],
+                ['id' => 13, 'label' => 'mysql'],
+                ['id' => 63, 'label' => 'docker'],
+                ['id' => 90, 'label' => 'apache'],
+            ]),
         ]);
     }
 }

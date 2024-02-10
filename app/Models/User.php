@@ -19,16 +19,18 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'user_id';
+
+    /**
      * The model's default values for attributes.
      *
      * @var array
      */
-    protected $attributes = [
-        'certifications' => [],
-        'education' => [],
-        'experience' => [],
-        'tags' => [],
-    ];
+    protected $attributes = [];
 
     /**
      * The attributes that are mass assignable.
@@ -36,16 +38,16 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'active',
         'first_name',
         'last_name',
-        'profile_name',
         'email',
         'email_verified_at',
         'password',
         'remember_token',
         'phone',
         'about',
+        'saved_jobs',
+        'posted_jobs',
         // json columns
         'certifications->enabled',
         'education->enabled',

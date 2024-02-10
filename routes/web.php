@@ -27,7 +27,7 @@ Route::get('/', [HomeController::class, 'show']);
 Route::get('/jobs', [JobListController::class, 'show']);
 
 Route::controller(JobPostController::class)->group(function () {
-    $uri = '/post-job';
+    $uri = '/post';
     $param = '{job}';
     Route::get($uri, 'index');
     Route::get("$uri/$param", 'show');

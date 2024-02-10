@@ -1,3 +1,5 @@
+{{-- Profile page will display user attributes, along with their posted and saved jobs --}}
+
 @extends('layouts.app')
 
 @section('title', 'Profile')
@@ -31,6 +33,7 @@
                     <label for="email" class="form-label">Email Address</label>
                     <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}">
                 </div>
+                <x-tags :tags="$user->tags"/>{{-- tags component --}}
                 <button type="submit" class="btn btn-primary">Update</button>
             </form>
         </div>

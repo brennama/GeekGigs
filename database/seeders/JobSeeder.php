@@ -212,11 +212,14 @@ class JobSeeder extends Seeder
      */
     public function run(): void
     {
+        $params = [
+            'body' => [],
+        ];
+
         for ($id = 1; $id <= 100; $id++) {
             $params['body'][] = [
                 'index' => [
                     '_index' => 'jobs',
-                    '_id' => $id
                 ]
             ];
 
@@ -249,13 +252,16 @@ class JobSeeder extends Seeder
             $companyLocations[$companyIndex] = random_int(0, count(self::LOCATION_CITIES) - 1);
         }
 
+        $title = self::JOB_TITLES[random_int(0, count(self::JOB_TITLES) - 1)];
+
         return [
-            'title' => self::JOB_TITLES[random_int(0, count(self::JOB_TITLES) - 1)],
+            'title' => $title,
             'company' => self::COMPANY_NAMES[$companyIndex],
+            'companyUrl' => sprintf('https://www.%s.com', self::COMPANY_NAMES[$companyIndex]),
+            'jobUrl' => 'https://www.greenhouse.com/' . uniqid('', false),
             'description' => 'Todo: generate company job descriptions',
             'city' => self::LOCATION_CITIES[$companyLocations[$companyIndex]],
             'state' => self::LOCATION_STATES[$companyLocations[$companyIndex]],
-            'jobAppUrl' => 'https://www.greenhouse.com/' . uniqid('', false),
             'jobType' => JobType::FullTime->value,
             'remotePolicy' => match ($remotePolicyIndex) {
                 0 => RemotePolicy::OnSite->value,
@@ -286,7 +292,13 @@ class JobSeeder extends Seeder
                 4 => $min + 50000,
                 5 => $min + 60000,
             },
-            'tags' => [],
+            'tags' => [
+                ['id' => 1, 'label' => 'javascript'],
+                ['id' => 5, 'label' => 'php'],
+                ['id' => 13, 'label' => 'mysql'],
+                ['id' => 63, 'label' => 'docker'],
+                ['id' => 90, 'label' => 'apache'],
+            ],
         ];
     }
 }

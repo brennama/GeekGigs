@@ -11,6 +11,9 @@
         <div class="column">
             <form method="post" id="jobForm">
                 @csrf
+                @if ($job?->id ?? false)
+                    @method('PUT')
+                @endif
                 <div class="mb-3">
                     <label for="company" class="form-label">Company</label>
                     <input type="text"
@@ -52,6 +55,7 @@
                            value="{{ $job?->state ?? '' }}">
                 </div>
                 <x-tags :tags="$job?->tags"/>{{-- tags component --}}
+                <input type="hidden" name="user_id" value="{{ Auth::user()->user_id  }}">
                 <button type="submit" class="btn btn-primary">{{ $job?->state ? 'Save' : 'Post' }} Job</button>
             </form>
         </div>

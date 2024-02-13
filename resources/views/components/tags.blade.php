@@ -6,7 +6,9 @@
 @endpush
 
 <div class="mb-1 ui-widget">
-    <label for="tagsInput" class="form-label">Tags <small class="text-secondary">(select up to ten)</small></label>
+    <label for="tagsInput" class="form-label">
+        Tags <small class="text-secondary">(select up to ten tags, click on tags to remove)</small>
+    </label>
     <input type="text" class="form-control" id="tagsInput" placeholder="start typing...">
 </div>
 <div class="mb-3">
@@ -71,11 +73,16 @@
 
     // Create hidden form fields based on tags for server processing
     $form.on('submit', () => {
+        let arr = [];
+
         for (let id in tags) {
-            $form.append(`
-                <input type="hidden" name="tags[]" value="{'id': ${id}, 'label': '${tags[id]}'}">
-            `);
+            arr.push({'id': id, 'label': tags[id]});
         }
+
+        let json = JSON.stringify(arr);
+        $form.append(`
+                <input type="hidden" name="tags" value='${json}'>
+            `);
     });
 
     function appendTag(tag) {
@@ -86,8 +93,6 @@
         );
 
         tags[tag.id] = tag.label;
-
-        console.log(Object.keys(tags));
     }
 </script>
 @endpush

@@ -51,9 +51,15 @@ class JobController extends Controller
     {
         $validated = $request->validated();
         $job = Job::fromArray($validated);
+        $job->tags = json_decode($job->tags, true);
 
         try {
             $this->repository->save($job);
+            PostedJob::create([
+                'user_id' => $validated['user_id'],
+                'job_id' => $job->id,
+                'job_title' => $job->title,
+            ]);
         } catch (Throwable) {
             return response()->json(status: 500);
         }

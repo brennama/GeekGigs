@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Web;
 
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Job;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Throwable;
@@ -51,9 +53,12 @@ class JobPostController extends Controller
     /**
      * Create job from form.
      */
-    public function create(Request $request): View
+    public function create(Request $request): RedirectResponse
     {
+        $subRequest = Request::create('/api/jobs', 'POST', $request->request->all());
+        $response = $this->app->handle($subRequest);
 
+        return redirect(config('app.url').'/profile');
     }
 
     public function update()

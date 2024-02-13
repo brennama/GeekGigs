@@ -6,6 +6,7 @@
 <div class="container" style="max-width: 600px;">
     <div class="row">
         <div class="column">
+            <h1 class="display-6 text-primary">Login</h1>
             <form method="post">
                 @csrf
                 <div class="mb-3">

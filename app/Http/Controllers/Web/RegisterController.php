@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 /**
  * Class RegisterController
@@ -11,9 +12,12 @@ use App\Http\Controllers\Controller;
  */
 class RegisterController extends Controller
 {
-    public function show()
+    /**
+     * Show registration page.
+     */
+    public function show(): View
     {
-
+        return view('register');
     }
 
     public function submit()

@@ -87,7 +87,7 @@ class Job implements Arrayable, Jsonable
     /**
      * Associated tags.
      */
-    public array $tags = [];
+    public string|array|null $tags = null;
 
     /**
      * Cast object to array.
@@ -115,18 +115,18 @@ class Job implements Arrayable, Jsonable
         $self = new static();
         $self->id = $values['_id'] ?? $values['id'] ?? null;
         $self->company = $values['company'];
-        $self->companyUrl = $values['companyUrl'] ?? null;
-        $self->jobUrl = $values['jobUrl'];
+//        $self->companyUrl = $values['companyUrl'] ?? null;
+//        $self->jobUrl = $values['jobUrl'];
         $self->title = $values['title'];
         $self->description = $values['description'] ?? null;
         $self->city = $values['city'];
         $self->state = $values['state'];
-        $self->salaryRangeMin = $values['salaryRangeMin'];
-        $self->salaryRangeMax = $values['salaryRangeMax'];
-        $self->tags = $values['tags'] ?? [];
-        $self->remotePolicy = RemotePolicy::tryFrom($values['remotePolicy']) ?? RemotePolicy::OnSite;
-        $self->experienceLevel = ExperienceLevel::tryFrom($values['experienceLevel']) ?? ExperienceLevel::MidLevel;
-        $self->jobType = JobType::tryFrom($values['jobType']) ?? JobType::FullTime;
+//        $self->salaryRangeMin = $values['salaryRangeMin'];
+//        $self->salaryRangeMax = $values['salaryRangeMax'];
+        $self->tags = $values['tags'] ?? null;
+//        $self->remotePolicy = RemotePolicy::tryFrom($values['remotePolicy']) ?? RemotePolicy::OnSite;
+//        $self->experienceLevel = ExperienceLevel::tryFrom($values['experienceLevel']) ?? ExperienceLevel::MidLevel;
+//        $self->jobType = JobType::tryFrom($values['jobType']) ?? JobType::FullTime;
 
         return $self;
     }

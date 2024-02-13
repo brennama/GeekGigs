@@ -24,20 +24,20 @@ class StoreJobRequest extends FormRequest
      */
     public function rules(): array
     {
-        // Todo: complete validation rules
         return [
-            'title' => ['required', 'string'],
-            'company' => ['required', 'string'],
-            'companyUrl' => ['required', 'url'],
-            'jobUrl' => ['required', 'url'],
-            'description' => ['nullable', 'string'],
-            'city' => ['required', 'string'],
-            'state' => ['required', 'string'],
-            'remotePolicy' => ['required'],
-            'experienceLevel' => ['required'],
-            'jobType' => ['required'],
-            'salaryRangeMin' => ['required', 'integer'],
-            'salaryRangeMax' => ['required', 'integer'],
+            'user_id' => ['required'],
+            'title' => ['required'],
+            'company' => ['required'],
+//            'companyUrl' => ['required', 'url'],
+//            'jobUrl' => ['required', 'url'],
+            'description' => ['nullable'],
+            'city' => ['required'],
+            'state' => ['required'],
+//            'remotePolicy' => ['required'],
+//            'experienceLevel' => ['required'],
+//            'jobType' => ['required'],
+//            'salaryRangeMin' => ['required', 'integer'],
+//            'salaryRangeMax' => ['required', 'integer'],
             'tags' => ['nullable'],
         ];
     }

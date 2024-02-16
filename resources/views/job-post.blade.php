@@ -8,7 +8,7 @@
         <h1 class="display-6 text-primary">Post a Job</h1>
     </div>
     <div class="row">
-        <div class="column">
+        <div class="col">
             <form method="post" id="jobForm">
                 @csrf
                 @if ($job?->id ?? false)

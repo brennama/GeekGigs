@@ -8,7 +8,7 @@
         <h1 class="display-6 text-primary">Reset Password</h1>
     </div>
     <div class="row">
-        <div class="column">
+        <div class="col">
             <form method="post">
                 @csrf
                 <div class="mb-3">

@@ -4,11 +4,18 @@
 
 @section('content')
 <div class="container" style="max-width: 600px;">
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            @foreach ($errors->all() as $error)
+                <span>{{ $error }}</span>@if (!$loop->last)<br>@endif
+            @endforeach
+        </div>
+    @endif
     <div class="row mb-3">
         <h1 class="display-6 text-primary">Register with GeekGigs</h1>
     </div>
     <div class="row">
-        <div class="column">
+        <div class="col">
             <form method="post" id="register-form">
                 @csrf
                 <div class="mb-3">

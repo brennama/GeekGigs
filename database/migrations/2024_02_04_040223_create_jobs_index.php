@@ -33,6 +33,50 @@ return new class extends Migration
                     'number_of_shards' => 1,
                     'number_of_replicas' => 1,
                 ],
+                'mappings' => [
+                    'properties' => [
+                        'title' => [
+                            'type' => 'text',
+                        ],
+                        'company' => [
+                            'type' => 'text',
+                        ],
+                        'companyUrl' => [
+                            'type' => 'text',
+                            'index' => false,
+                        ],
+                        'jobUrl' => [
+                            'type' => 'text',
+                            'index' => false,
+                        ],
+                        'description' => [
+                            'type' => 'text',
+                        ],
+                        'city' => [
+                            'type' => 'keyword',
+                        ],
+                        'state' => [
+                            'type' => 'keyword',
+                        ],
+                        'jobType' => [
+                            'type' => 'keyword',
+                        ],
+                        'remotePolicy' => [
+                            'type' => 'keyword',
+                        ],
+                        'experienceLevel' => [
+                            'type' => 'keyword',
+                        ],
+                        'salaryRangeMin' => [
+                            'type' => 'integer',
+                            'index' => false,
+                        ],
+                        'salaryRangeMax' => [
+                            'type' => 'integer',
+                            'index' => false,
+                        ],
+                    ],
+                ],
             ],
         ]);
     }

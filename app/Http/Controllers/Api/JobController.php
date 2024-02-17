@@ -38,10 +38,13 @@ class JobController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function search(): JsonResponse
+    public function search(Request $request): JsonResponse
     {
-        // Add functionality to search for jobs
-        return response()->json();
+        $results = $this->repository->search(
+            $request->query->get('term'),
+        );
+
+        return response()->json($results);
     }
 
     /**

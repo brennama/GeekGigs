@@ -198,6 +198,30 @@ class JobSeeder extends Seeder
         [120000, 130000, 140000],
     ];
 
+    private const STACKS = [
+        [
+            ['id' => 1, 'label' => 'javascript'],
+            ['id' => 5, 'label' => 'php'],
+            ['id' => 13, 'label' => 'mysql'],
+            ['id' => 63, 'label' => 'docker'],
+            ['id' => 90, 'label' => 'apache'],
+        ] ,
+        [
+            ['id' => 1, 'label' => 'javascript'],
+            ['id' => 2, 'label' => 'python'],
+            ['id' => 47, 'label' => 'postgresql'],
+            ['id' => 63, 'label' => 'docker'],
+            ['id' => 151, 'label' => 'nginx'],
+        ],
+        [
+            ['id' => 3, 'label' => 'java'],
+            ['id' => 34, 'label' => 'typescript'],
+            ['id' => 63, 'label' => 'docker'],
+            ['id' => 202, 'label' => 'tomcat'],
+            ['id' => 440, 'label' => 'cassandra'],
+        ],
+    ];
+
     /**
      * JobSeeder constructor.
      *
@@ -257,7 +281,10 @@ class JobSeeder extends Seeder
         return [
             'title' => $title,
             'company' => self::COMPANY_NAMES[$companyIndex],
-            'companyUrl' => sprintf('https://www.%s.com', self::COMPANY_NAMES[$companyIndex]),
+            'companyUrl' => sprintf(
+                'https://www.%s.com',
+                strtolower(str_replace(' ' , '', self::COMPANY_NAMES[$companyIndex])),
+            ),
             'jobUrl' => 'https://www.greenhouse.com/' . uniqid('', false),
             'description' => 'Todo: generate company job descriptions',
             'city' => self::LOCATION_CITIES[$companyLocations[$companyIndex]],
@@ -292,13 +319,7 @@ class JobSeeder extends Seeder
                 4 => $min + 50000,
                 5 => $min + 60000,
             },
-            'tags' => [
-                ['id' => 1, 'label' => 'javascript'],
-                ['id' => 5, 'label' => 'php'],
-                ['id' => 13, 'label' => 'mysql'],
-                ['id' => 63, 'label' => 'docker'],
-                ['id' => 90, 'label' => 'apache'],
-            ],
+            'tags' => self::STACKS[random_int(0, count(self::STACKS) - 1)],
         ];
     }
 }

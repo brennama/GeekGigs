@@ -37,18 +37,22 @@
             </div>
         </div>
         <div class="col-md-4"> 
-            <div class="h-100 overflow-auto"> 
+            <div class="h-100 overflow-auto" style="max-height: 80vh;"> 
                 <h5>Job List</h5>
                 <div class="card mb-2">
                     <div class="card-body">
-                        Job 1 details
-                    </div>
+                    <h5 class="card-title">Job Title</h5>
+                    <p class="card-text">Company Name</p>
+                    <p class="card-text">Job Location</p>
+                    <p class="card-text description">Job Description. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                 </div>
+                </div>
+                
             </div>
         </div>
         <div class="col-md-6">
     <div class="position-relative h-100">
-        <div class="h-100 overflow-auto" style="max-height: 80vh;"> <!-- Added max-height -->
+        <div class="h-100 overflow-auto" style="max-height: 80vh;"> 
             <h5>Job Details</h5>
             <div class="card mb-2">
                 <div class="card-body">

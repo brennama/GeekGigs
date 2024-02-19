@@ -21,7 +21,7 @@
     const cache = {}
     const tags = {}
     const $form = $('form');
-    const tagLimit = 10;
+    const tagLimit = 5;
 
     @if (!empty($tags))
         let arr = {{ Illuminate\Support\Js::from($tags) }};

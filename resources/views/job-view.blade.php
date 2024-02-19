@@ -66,7 +66,7 @@
                        href="{{ $job->jobUrl }}" target="_blank">Apply Now</a>
                     <div class="mt-3">
                     @foreach($job->tags as $tag)
-                        <span role="button"
+                        <span role="button" style="cursor:default;"
                               class="badge rounded-pill text-bg-light ms-1 me-1"
                               id="tag-{{ $tag['id'] }}">{{ $tag['label'] }}</span>
                     @endforeach

@@ -94,7 +94,7 @@ $experienceLevel = App\Enums\ExperienceLevel::tryFrom(request()->get('experience
                             <small>{{ $job->city }}, {{ $job->state }}</small>
                         </p>
                         @foreach($job->tags as $tag)
-                            <span role="button"
+                            <span role="button" style="cursor:default;"
                                   class="badge rounded-pill text-bg-light ms-1 me-1"
                                   id="tag-{{ $tag['id'] }}">{{ $tag['label'] }}</span>
                         @endforeach
@@ -180,7 +180,7 @@ function display(job) {
     @endif
     let salaryHtml = '<small>'+nf.format(job['salaryRangeMin'])+' - '+nf.format(job['salaryRangeMax'])+'</small>';
     for (let index in tags) {
-        tagHtml += `<span role="button"
+        tagHtml += `<span role="button" style="cursor:default;"
               class="badge rounded-pill text-bg-light ms-1 me-1"
               id="tag-${tags[index]['id']}">${tags[index]['label']}</span>`
     }

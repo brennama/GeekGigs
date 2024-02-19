@@ -46,7 +46,10 @@ class JobController extends Controller
     {
         $request->validate(['term' => ['required']]);
 
-        $results = $this->repository->search(
+        $method = strtolower($request->get('search', 'search'));
+        $method = $method ?: 'search';
+
+        $results = $this->repository->{$method}(
             $request->query->get('term'),
             $request->query->get('limit', 20),
             $request->query->get('offset', 0),

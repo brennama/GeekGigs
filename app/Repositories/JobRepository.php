@@ -79,6 +79,49 @@ class JobRepository extends DocumentRepository
     }
 
     /**
+     * Fuzzy search for documents.
+     *
+     * @return Job[]
+     */
+    public function fuzzy(string $term, int $size = 20, int $from = 0): array
+    {
+        $response = $this->client->search([
+            'index' => 'jobs',
+            'from' => $from,
+            'size' => $size,
+            'body' => [
+                'query' => [
+                    'function_score' => [
+                        'query' => [
+                            'bool' => [
+                                'must' => [
+                                    'multi_match' => [
+                                        'query' => $term,
+                                        'fields' => [
+                                            'tags.label^3',
+                                            'title^2',
+                                            'description',
+                                        ],
+                                        'fuzziness' => 'AUTO',
+                                        'prefix_length' => 2,
+                                    ],
+                                ],
+                                'filter' => [
+                                    'term' => [
+                                        'archived' => false,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        return $this->decode($response)['hits'];
+    }
+
+    /**
      * Index document.
      *
      * @throws Throwable

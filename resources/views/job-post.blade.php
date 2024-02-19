@@ -6,7 +6,9 @@
 <div class="container" style="max-width:800px;">
     <x-alerts/>{{-- alerts component --}}
     <div class="row mb-3">
-        <h1 class="display-6 text-primary">Post a Job</h1>
+        <h1 class="display-6 {{ $job?->archived ? 'text-danger' : 'text-primary' }}">
+            {{ $job?->archived ? 'Archived Job' : 'Post a Job' }}
+        </h1>
     </div>
     <form method="post" id="jobForm" action="">
         <div class="row">
@@ -103,8 +105,11 @@
             <div class="mb-3">
                 <x-tags :tags="$job?->tags" tabindex="13"/>{{-- tags component --}}
                 <input type="hidden" name="user_id" value="{{ Auth::user()->user_id }}">
-                <button type="submit" class="btn btn-primary" tabindex="14">
-                    {{ $job?->state ? 'Save' : 'Post' }} Job
+                <input type="hidden" name="archived" value="{{ $job?->archived ? 1 : 0 }}">
+                <button type="submit"
+                        class="btn {{ $job?->archived ? 'btn-outline-danger' : 'btn-primary' }}"
+                        tabindex="14">
+                    {{ $job?->archived ? 'Post as New Job' : ($job?->id ? 'Save' : 'Post') }} Job
                 </button>
             </div>
         </div>

@@ -74,7 +74,7 @@
                     </div>
                 @endif
                 @foreach($saved as $job)
-                    <p id="p-{{ $job->job_id }}">
+                    <p id="s-{{ $job->job_id }}">
                         <button type="button"
                                 id="unsave-{{ $job->job_id }}"
                                 class="btn btn-outline-primary btn-unsave btn-remove float-end">Unsave</button>
@@ -98,8 +98,11 @@
                         </div>
                     @endif
                     @foreach($posts as $post)
-                        <p>
-                            <button type="button" class="btn btn-outline-danger btn-remove float-end">
+                        <p id="p-{{ $post->job_id }}">
+                            <button type="button"
+                                    id="archive-{{ $post->job_id }}"
+                                    data-title="{{ $post->job_title }}"
+                                    class="btn btn-outline-danger btn-remove btn-archive float-end">
                                 Archive
                             </button>
                             <a href="/post/{{ $post->job_id }}"
@@ -114,25 +117,26 @@
             <h1 class="display-6 text-primary">Archived Jobs</h1>
             <div class="card mb-3">
                 <div class="card-body">
-                @if (count($archives) === 0)
-                    <div class="text-center">
-                        <span class="text-secondary">No Archived Jobs</span>
+                    @if (count($archives) === 0)
+                        <div class="text-center" id="no-archived-jobs">
+                            <span class="text-secondary">No Archived Jobs</span>
+                        </div>
+                    @endif
+                    <div id="archive-list">
+                    @foreach($archives as $archive)
+                        <p id="a-{{ $archive->job_id }}">
+    {{--                        <button type="button"--}}
+    {{--                                class="btn btn-outline-danger btn-remove float-end">--}}
+    {{--                            Delete--}}
+    {{--                        </button>--}}
+                            <a href="/post/{{ $archive->job_id }}"
+                               class="text-secondary link-underline link-underline-opacity-0"
+                               target="_blank">
+                                {{ $archive->job_title }} - {{ $archive->created_at?->format('M d, Y') }}
+                            </a>
+                        </p>
+                    @endforeach
                     </div>
-                @endif
-                @foreach($archives as $archive)
-                    <p>
-                        <button type="button"
-                                id="unsave-{{ $archive->job_id }}"
-                                class="btn btn-outline-danger btn-archive btn-remove float-end">
-                            Delete
-                        </button>
-                        <a href="/post/{{ $archive->job_id }}"
-                           class="link-underline link-underline-opacity-0"
-                           target="_blank">
-                            {{ $archive->job_title }} - {{ $archive->created_at?->format('M d, Y') }}
-                        </a>
-                    </p>
-                @endforeach
                 </div>
             </div>
         </div>
@@ -144,25 +148,57 @@
 @push('body_scripts')
 <script>
 $(document).ready(() => {
-    $('.container').on('click', '.btn-unsave', (event) => {
-        console.log(event.target.id);
-        let $btn = $('#'+event.target.id);
-        $btn.attr('disabled', true)
+    const container = $('.container');
+
+    container.on('click', '.btn-unsave', (event) => {
+        let $unsaveBtn = $('#'+event.target.id);
+        $unsaveBtn.attr('disabled', true)
         let id = event.target.id.replace('unsave-', '');
-        console.log(id);
         let data = {
             id: id,
             _method: 'DELETE',
             _token: "{{ csrf_token() }}"
         };
-        console.log(data)
         $.ajax({
             url: '/jobs/save',
             data: data,
             method: 'DELETE',
             success: () => {
-                $btn.attr('disabled', false);
+                $unsaveBtn.attr('disabled', false);
+                $(`#s-${id}`).empty();
+            },
+            error: (response) => {
+                console.log(response);
+            },
+        });
+    });
+
+    container.on('click', '.btn-archive', (event) => {
+        let $archiveBtn = $('#'+event.target.id);
+        $archiveBtn.attr('disabled', true)
+        let id = event.target.id.replace('archive-', '');
+        let data = {
+            id: id,
+            title: $archiveBtn.attr('data-title'),
+            _method: 'DELETE',
+            _token: "{{ csrf_token() }}"
+        };
+        let createdAt = '{{ date('M d, Y') }}';
+        $.ajax({
+            url: '/jobs/archive',
+            data: data,
+            method: 'DELETE',
+            success: (r) => {
+                console.log(r);
+                $archiveBtn.attr('disabled', false);
                 $(`#p-${id}`).empty();
+                $(`#no-archived-jobs`).empty();
+                $(`#archive-list`).append(`
+                    <p id="a-${id}">
+                        <a href="/post/${id}"
+                           class="text-secondary link-underline link-underline-opacity-0"
+                           target="_blank">${$archiveBtn.attr('data-title')} - ${createdAt}</a>
+                    </p>`);
             },
             error: (response) => {
                 console.log(response);

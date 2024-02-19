@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\ArchivedJob;
 use App\Models\PostedJob;
 use App\Models\SavedJob;
 use Illuminate\Http\RedirectResponse;
@@ -30,7 +31,7 @@ class ProfileController extends Controller
         $user->tags = json_decode($user->tags, true);
         $posts = PostedJob::where('user_id', $user->user_id)->get();
         $saved = SavedJob::where('user_id', $user->user_id)->get();
-        $archives = [];
+        $archives = ArchivedJob::where('user_id', $user->user_id)->get();
 
         return view('profile', [
             'user' => $user,

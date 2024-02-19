@@ -85,12 +85,33 @@ class JobRepository extends DocumentRepository
      */
     public function save(Job $model): void
     {
-        $response = $this->client->index([
+        $params = [
             'index' => 'jobs',
             'body' => $model->toArray(),
-        ]);
+        ];
 
+        if (!empty($model->id)) {
+            $params['id'] = $model->id;
+        }
+
+        $response = $this->client->index($params);
         $decoded = $this->decode($response);
         $model->id = $decoded['_id'];
+    }
+
+    /**
+     * Update document.
+     *
+     * @throws Throwable
+     */
+    public function update(Job $model): void
+    {
+        $this->client->update([
+            'index' => 'jobs',
+            'id' => $model->id,
+            'body' => [
+                'doc' => $model->toArray(),
+            ],
+        ]);
     }
 }

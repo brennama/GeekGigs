@@ -31,6 +31,7 @@ Route::get('/jobs', [JobListController::class, 'search']);
 Route::get('/jobs/{jobId}', [JobListController::class, 'show']);
 Route::post('/jobs/save', [JobSaveController::class, 'save']);
 Route::delete('/jobs/save', [JobSaveController::class, 'unsave']);
+Route::delete('/jobs/archive', [JobSaveController::class, 'archive']);
 
 Route::controller(JobPostController::class)->group(function () {
     $uri = '/post';

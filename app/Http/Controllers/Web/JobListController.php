@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Job;
 use Generator;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +23,7 @@ class JobListController extends Controller
     /**
      * Show job post.
      */
-    public function show(Request $request): View
+    public function show(Request $request): View|RedirectResponse
     {
         $subRequest = Request::create(
             sprintf('/api/jobs/%s', $request->jobId),
@@ -36,6 +37,14 @@ class JobListController extends Controller
             // return not found
         }
 
+        $job = Job::fromArray(
+            json_decode($response->getContent(), true),
+        );
+
+        if ($job->archived && Auth::user()?->user_id !== $job->userId) {
+            return redirect()->intended(config('app.url').'/jobs');
+        }
+
         if (Auth::check()) {
             $saved = DB::table('saved_jobs')
                 ->where('user_id', Auth::user()->user_id)
@@ -44,9 +53,7 @@ class JobListController extends Controller
         }
 
         $this->viewData['saved'] = !empty($saved);
-        $this->viewData['job'] = Job::fromArray(
-            json_decode($response->getContent(), true),
-        );
+        $this->viewData['job'] = $job;
 
         return view('job-view', $this->viewData);
     }

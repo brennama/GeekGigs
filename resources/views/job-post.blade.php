@@ -51,11 +51,13 @@
                 </div>
                 <div class="mb-3">
                     <label for="jobType" class="form-label">Job Type</label>
-                    <x-job-type tabindex="9" required="1"/>{{-- job type component --}}
+                    {{-- job type component --}}
+                    <x-job-type tabindex="9" required="1" :selected="$job?->jobType"/>
                 </div>
                 <div class="mb-3">
                     <label for="remotePolicy" class="form-label">Remote Policy</label>
-                    <x-remote-policy tabindex="11" required="1"/>{{-- remote policy component --}}
+                    {{-- remote policy component --}}
+                    <x-remote-policy tabindex="11" required="1" :selected="$job?->remotePolicy"/>
                 </div>
             </div>
             <div class="col-md-6">
@@ -69,7 +71,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="state" class="form-label">State</label>
-                    <x-states tabindex="4" required="1"/>{{-- states component --}}
+                    <x-states tabindex="4" required="1" :selected="$job?->state"/>{{-- states component --}}
                 </div>
                 <div class="mb-3">
                     <label for="jobUrl" class="form-label">Job URL</label>
@@ -89,7 +91,8 @@
                 </div>
                 <div class="mb-3">
                     <label for="experienceLevel" class="form-label">Experience Level</label>
-                    <x-experience-level tabindex="10" required="1"/>{{-- experience level component --}}
+                    {{-- experience level component --}}
+                    <x-experience-level tabindex="10" required="1" :selected="$job->experienceLevel"/>
                 </div>
             </div>
         </div>
@@ -105,12 +108,17 @@
             <div class="mb-3">
                 <x-tags :tags="$job?->tags" tabindex="13"/>{{-- tags component --}}
                 <input type="hidden" name="user_id" value="{{ Auth::user()->user_id }}">
+                <input type="hidden" name="job_id" value="{{ $job?->id }}">
                 <input type="hidden" name="archived" value="{{ $job?->archived ? 1 : 0 }}">
                 <button type="submit"
                         class="btn {{ $job?->archived ? 'btn-outline-danger' : 'btn-primary' }}"
                         tabindex="14">
                     {{ $job?->archived ? 'Post as New Job' : ($job?->id ? 'Save' : 'Post') }} Job
                 </button>
+                @if (!empty($job?->archived))
+                    <a href="{{ str_replace('/api', '', request()->getRequestUri()) }}"
+                       class="btn btn-outline-primary float-end" target="_blank">View Archived Job</a>
+                @endif
             </div>
         </div>
     </form>

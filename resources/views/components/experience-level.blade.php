@@ -2,6 +2,8 @@
     @if (!empty($tabindex)) tabindex="{{ $tabindex }}" @endif {{ !empty($required) ? 'required' : '' }}>
     <option>Select Experience Level</option>
     @foreach (App\Enums\ExperienceLevel::cases() as $case)
-        <option value="{{ $case->value }}">{{ $case->value }}</option>
+        <option value="{{ $case->value }}"{{ $selected->value === $case->value ? ' selected' : '' }}>
+            {{ $case->value }}
+        </option>
     @endforeach
 </select>

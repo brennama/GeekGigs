@@ -5,7 +5,10 @@
 @section('content')
 <div class="container">
     <div class="row mb-3 text-center">
-        <h1 class="display-6 text-primary">{{ $job->title }} at {{ $job->company }}</h1>
+        <h1 class="display-6 text-primary">
+            {{ $job->title }} at {{ $job->company }}
+            @if (!empty($job->archived))<span class="text-danger">[ARCHIVED]</span>@endif
+        </h1>
     </div>
     <div class="row">
         <div class="col">
@@ -17,9 +20,11 @@
                             <small class="text-secondary">Posted on {{ $job->createdAt->format('M d, Y') }}</small>
                         </div>
                         @auth
+                        @if (empty($job->archived))
                         <div class="col-auto">
                             <x-save :job="$job" :saved="$saved"/>{{-- save job component --}}
                         </div>
+                        @endif
                         @endauth
                     </div>
                     <div class="row mb-3">

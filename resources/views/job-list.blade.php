@@ -176,7 +176,7 @@ function display(job) {
         <div class="col">
             <p>${job['company']}<br>
                 <small>
-                    <a class="link-secondary" href="${job['companyUrl']}">${job['companyUrl']}</a><br>
+                    <a class="link-secondary" target="_blank" href="${job['companyUrl']}">${job['companyUrl']}</a><br>
                     ${job['city']}, ${job['state']}
                 </small>
             </p>

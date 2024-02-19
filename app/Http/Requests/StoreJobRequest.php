@@ -37,7 +37,7 @@ class StoreJobRequest extends FormRequest
             'remotePolicy' => ['nullable'],
             'experienceLevel' => ['nullable'],
             'jobType' => ['nullable'],
-            'salaryRangeMin' => ['nullablev', 'integer'],
+            'salaryRangeMin' => ['nullable', 'integer'],
             'salaryRangeMax' => ['nullable', 'integer'],
             'tags' => ['nullable'],
         ];

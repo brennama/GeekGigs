@@ -11,8 +11,11 @@ class States extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(public int|string|null $tabindex = null, public int|string $required = 0)
-    {
+    public function __construct(
+        public int|string|null $tabindex = null,
+        public int|string $required = 0,
+        public string $selected = '',
+    ) {
         //
     }
 

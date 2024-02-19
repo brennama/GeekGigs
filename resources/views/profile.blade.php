@@ -106,6 +106,9 @@
                                 Archive
                             </button>
                             <a href="/post/{{ $post->job_id }}"
+                               class="btn btn-outline-primary btn-apply float-end me-3"
+                               target="_blank">Edit</a>
+                            <a href="/jobs/{{ $post->job_id }}"
                                class="link-underline link-underline-opacity-0"
                                target="_blank">
                                 {{ $post->job_title }} - {{ $post->created_at?->format('M d, Y') }}

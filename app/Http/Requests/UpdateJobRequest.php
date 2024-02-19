@@ -35,11 +35,11 @@ class UpdateJobRequest extends FormRequest
             'description' => ['nullable'],
             'city' => ['nullable'],
             'state' => ['nullable'],
-            'remotePolicy' => ['required'],
-            'experienceLevel' => ['required'],
-            'jobType' => ['required'],
-            'salaryRangeMin' => ['required', 'integer'],
-            'salaryRangeMax' => ['required', 'integer'],
+            'remotePolicy' => ['nullable'],
+            'experienceLevel' => ['nullable'],
+            'jobType' => ['nullable'],
+            'salaryRangeMin' => ['nullable', 'integer'],
+            'salaryRangeMax' => ['nullable', 'integer'],
             'tags' => ['nullable'],
         ];
     }

@@ -2,6 +2,12 @@
 
 @section('title', 'Search for Jobs')
 
+@php
+$jobType = App\Enums\JobType::tryFrom(request()->get('jobType'));
+$remotePolicy = App\Enums\RemotePolicy::tryFrom(request()->get('remotePolicy'));
+$experienceLevel = App\Enums\ExperienceLevel::tryFrom(request()->get('experienceLevel'));
+@endphp
+
 @section('content')
 <div class="container-fluid">
     @if (empty($term))
@@ -57,10 +63,14 @@
                 <form method="get">
                 <h5>Filter Options</h5>
                     <input type="hidden" name="term" value="{{ $term }}">
-                    <div class="mb-2"><x-job-type/>{{-- job type component --}}</div>
-                    <div class="mb-2"><x-remote-policy/>{{-- remote policy component --}}</div>
-                    <div class="mb-2"><x-experience-level/>{{-- experience level component --}}</div>
-                    <button class="btn btn-outline-secondary btn-sm" type="submit" id="search">Filter</button>
+                    {{-- job type component --}}
+                    <div class="mb-2"><x-job-type :selected="$jobType"/></div>
+                    {{-- remote policy component --}}
+                    <div class="mb-2"><x-remote-policy :selected="$remotePolicy"/></div>
+                    {{-- experience level component --}}
+                    <div class="mb-2"><x-experience-level :selected="$experienceLevel"/></div>
+                    <button class="btn btn-outline-primary btn-apply" type="submit" id="search">Filter</button>
+                    <button class="btn btn-outline-secondary btn-apply float-end" type="submit" id="clear">Clear</button>
                 </form>
             </div>
         </div>
@@ -205,5 +215,17 @@ function display(job) {
     </div>
     `);
 }
+</script>
+@endpush
+
+@push('body_scripts')
+<script>
+$(document).ready(() => {
+    $('#clear').click((e) => {
+        $('#jobTypeSelect').val('').change();
+        $('#remotePolicySelect').val('').change();
+        $('#experienceLevelSelect').val('').change();
+    });
+});
 </script>
 @endpush

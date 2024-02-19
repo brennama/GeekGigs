@@ -46,7 +46,14 @@ class JobRepository extends DocumentRepository
      *
      * @return Job[]
      */
-    public function search(string $term, int $size = 20, int $from = 0): array
+    public function search(
+        string $term,
+        int $size = 20,
+        int $from = 0,
+        ?string $jobType = null,
+        ?string $remotePolicy = null,
+        ?string $experienceLevel = null,
+    ): array
     {
         $response = $this->client->search([
             'index' => 'jobs',
@@ -65,17 +72,56 @@ class JobRepository extends DocumentRepository
                                 ],
                             ],
                         ],
-                        'filter' => [
-                            'term' => [
-                                'archived' => false,
-                            ],
-                        ],
+                        'filter' => $this->filter($jobType, $remotePolicy, $experienceLevel),
                     ],
                 ],
             ],
         ]);
 
         return $this->decode($response)['hits'];
+    }
+
+    /**
+     * Create filter for query.
+     */
+    private function filter(
+        ?string $jobType,
+        ?string $remotePolicy,
+        ?string $experienceLevel,
+    ): array {
+        $params = [
+           [
+               'term' => [
+                   'archived' => false,
+               ],
+           ],
+        ];
+
+        if ($jobType !== null) {
+            $params[] = [
+                'term' => [
+                    'jobType' => $jobType,
+                ],
+            ];
+        }
+
+        if ($remotePolicy !== null) {
+            $params[] = [
+                'term' => [
+                    'remotePolicy' => $remotePolicy,
+                ],
+            ];
+        }
+
+        if ($experienceLevel !== null) {
+            $params[] = [
+                'term' => [
+                    'experienceLevel' => $experienceLevel,
+                ],
+            ];
+        }
+
+        return $params;
     }
 
     /**

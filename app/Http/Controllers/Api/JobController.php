@@ -53,6 +53,9 @@ class JobController extends Controller
             $request->query->get('term'),
             $request->query->get('limit', 20),
             $request->query->get('offset', 0),
+            $request->query->get('jobType'),
+            $request->query->get('remotePolicy'),
+            $request->query->get('experienceLevel'),
         );
 
         return response()->json($results);

@@ -1,6 +1,6 @@
 <select class="form-select" name="state"
     @if (!empty($tabindex)) tabindex="{{ $tabindex }}" @endif {{ !empty($required) ? 'required' : '' }}>
-    <option>Select State</option>
+    <option value="">Select State</option>
     <option value="AL"{{ $selected === 'AL' ? ' selected' : '' }}>Alabama</option>
     <option value="AK"{{ $selected === 'AK' ? ' selected' : '' }}>Alaska</option>
     <option value="AZ"{{ $selected === 'AZ' ? ' selected' : '' }}>Arizona</option>

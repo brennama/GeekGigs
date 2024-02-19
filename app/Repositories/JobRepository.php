@@ -46,34 +46,36 @@ class JobRepository extends DocumentRepository
      *
      * @return Job[]
      */
-    public function search(string $term): array
+    public function search(string $term, int $size = 20, int $from = 0): array
     {
         $response = $this->client->search([
             'index' => 'jobs',
+            'from' => $from,
+            'size' => $size,
             'body' => [
                 'query' => [
-                    'multi_match' => [
-                        'query' => $term,
-                        'fields' => [
-                            'tags.label^3',
-                            'title^2',
-                            'description',
+                    'bool' => [
+                        'must' => [
+                            'multi_match' => [
+                                'query' => $term,
+                                'fields' => [
+                                    'tags.label^3',
+                                    'title^2',
+                                    'description',
+                                ],
+                            ],
+                        ],
+                        'filter' => [
+                            'term' => [
+                                'archived' => false,
+                            ],
                         ],
                     ],
                 ],
             ],
         ]);
 
-        $decoded = $this->decode($response);
-
-        $results = [];
-        foreach ($decoded['hits']['hits'] as $hit) {
-            $source = $hit['_source'];
-            $source['id'] = $hit['_id'];
-            $results[] = Job::fromArray($source);
-        }
-
-        return $results;
+        return $this->decode($response)['hits'];
     }
 
     /**

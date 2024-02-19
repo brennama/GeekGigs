@@ -7,6 +7,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Throwable;
 
 /**
  * Class UserController
@@ -21,7 +22,23 @@ class UserController extends Controller
     public function store(StoreUserRequest $request): JsonResponse
     {
         $validated = $request->validated();
-        $user = User::create($validated);
+        $existingUser = User::firstWhere('email', $validated['email']);
+
+        if ($existingUser instanceof User) {
+            return response()->json([
+                'message' => 'Email address is already registered.',
+                'status' => 400,
+            ], 400);
+        }
+
+        try {
+            $user = User::create($validated);
+        } catch (Throwable) {
+            return response()->json([
+                'message' => 'Internal Server Error.',
+                'status' => 500,
+            ], 500);
+        }
 
         return response()->json($user);
     }

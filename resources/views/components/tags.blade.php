@@ -9,7 +9,7 @@
     <label for="tagsInput" class="form-label">
         Tags <small class="text-secondary">(select up to ten tags, click on tags to remove)</small>
     </label>
-    <input type="text" class="form-control" id="tagsInput" placeholder="start typing...">
+    <input type="text" class="form-control" id="tagsInput" placeholder="start typing..." @if (!empty($tabindex)) tabindex="{{ $tabindex }}" @endif>
 </div>
 <div class="mb-3">
     <div id="tags" style="height:60px; overflow:auto;"></div>

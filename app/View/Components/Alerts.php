@@ -11,15 +11,12 @@ use Illuminate\View\Component;
  *
  * @package App\View\Components
  */
-class Alert extends Component
+class Alerts extends Component
 {
     /**
      * Create a new component instance.
      */
-    public function __construct(
-        public string $type,
-        public string $message,
-    ) {
+    public function __construct() {
         //
     }
 
@@ -28,6 +25,6 @@ class Alert extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.alert');
+        return view('components.alerts');
     }
 }

@@ -11,6 +11,8 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
+    protected array $viewData = [];
+
     /**
      * Controller constructor.
      */

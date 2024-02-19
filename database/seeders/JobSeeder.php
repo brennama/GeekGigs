@@ -247,7 +247,7 @@ class JobSeeder extends Seeder
                 ]
             ];
 
-            $params['body'][] = $this->generateJobPosting();
+            $params['body'][] = $this->generateJobPosting($id);
 
             // Every 1000 documents stop and send the bulk request
             if ($id % 1000 === 0) {
@@ -265,7 +265,7 @@ class JobSeeder extends Seeder
     /**
      * Generate job post.
      */
-    private function generateJobPosting(): array
+    private function generateJobPosting(int $id): array
     {
         static $companyLocations = [];
         $companyIndex = random_int(0, count(self::COMPANY_NAMES) - 1);
@@ -279,6 +279,7 @@ class JobSeeder extends Seeder
         $title = self::JOB_TITLES[random_int(0, count(self::JOB_TITLES) - 1)];
 
         return [
+            'userId' => 1,
             'title' => $title,
             'company' => self::COMPANY_NAMES[$companyIndex],
             'companyUrl' => sprintf(
@@ -320,6 +321,9 @@ class JobSeeder extends Seeder
                 5 => $min + 60000,
             },
             'tags' => self::STACKS[random_int(0, count(self::STACKS) - 1)],
+            'archived' => $id % 20 === 0,
+            'createdAt' => date('Y-m-d H:i:s'),
+            'updatedAt' => date('Y-m-d H:i:s'),
         ];
     }
 }

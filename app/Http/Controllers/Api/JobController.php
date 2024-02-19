@@ -40,8 +40,12 @@ class JobController extends Controller
      */
     public function search(Request $request): JsonResponse
     {
+        $request->validate(['term' => ['required']]);
+
         $results = $this->repository->search(
             $request->query->get('term'),
+            $request->query->get('limit', 20),
+            $request->query->get('offset', 0),
         );
 
         return response()->json($results);
@@ -64,7 +68,10 @@ class JobController extends Controller
                 'job_title' => $job->title,
             ]);
         } catch (Throwable) {
-            return response()->json(status: 500);
+            return response()->json([
+                'message' => 'Internal Server Error.',
+                'status' => 500,
+            ], 500);
         }
 
         return response()->json($job);
@@ -78,7 +85,10 @@ class JobController extends Controller
         $job = $this->repository->find($id);
 
         if ($job === null) {
-            return response()->json(status: 404);
+            return response()->json([
+                'message' => 'Not Found',
+                'status' => 404,
+            ], 404);
         }
 
         return response()->json($job);

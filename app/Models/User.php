@@ -48,6 +48,7 @@ class User extends Authenticatable
         'about',
         'saved_jobs',
         'posted_jobs',
+        'isAdmin',
         // json columns
         'certifications->enabled',
         'education->enabled',
@@ -63,6 +64,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'isAdmin',
     ];
 
     /**

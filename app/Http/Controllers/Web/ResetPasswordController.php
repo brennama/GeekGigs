@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Http\Requests\ChangePasswordRequest;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -28,6 +30,30 @@ class ResetPasswordController extends Controller
     }
 
     /**
+     * Change password from profile.
+     */
+    public function change(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'password' => [
+                'required',
+                'confirmed',
+                \Illuminate\Validation\Rules\Password::min(8)
+                    ->numbers()
+                    ->letters()
+                // ->uncompromised(),
+            ],
+        ]);
+
+        $user = Auth::user();
+        $user->password = Hash::make($request->request->get('password'));
+        $user->save();
+        $request->session()->flash('status', 'Successfully updated password');
+
+        return redirect()->back();
+    }
+
+    /**
      * Handle form submission.
      */
     public function submit(Request $request): RedirectResponse
@@ -35,7 +61,14 @@ class ResetPasswordController extends Controller
         $request->validate([
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|min:8|confirmed',
+            'password' => [
+                'required',
+                'confirmed',
+                \Illuminate\Validation\Rules\Password::min(8)
+                    ->numbers()
+                    ->letters()
+                // ->uncompromised(),
+            ],
         ]);
 
         $status = Password::reset(

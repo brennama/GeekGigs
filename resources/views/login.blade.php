@@ -4,27 +4,30 @@
 
 @section('content')
 <div class="container" style="max-width: 600px;">
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            @foreach ($errors->all() as $error)
-                <span>{{ $error }}</span>@if (!$loop->last)<br>@endif
-            @endforeach
-        </div>
-    @endif
+    <x-alerts/>{{-- alerts component --}}
     <div class="row">
         <div class="col">
             <h1 class="display-6 text-primary">Login</h1>
-            <form method="post">
+            <form method="post" action="{{ request()->fullUrl() }}">
                 @csrf
                 <div class="mb-3">
                     <label for="email" class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+                    <input type="email"
+                           class="form-control"
+                           id="email"
+                           name="email"
+                           value="{{ old('email') }}"
+                           aria-describedby="emailHelp" required>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" aria-describedby="passwordHelp">
+                    <input type="password"
+                           class="form-control"
+                           id="password"
+                           name="password"
+                           aria-describedby="passwordHelp" required>
                     <div id="passwordHelp" class="form-text">
-                        <small class="me-3"><a href="/password-reset">Forgot Password</a></small>
+{{--                    <small class="me-3"><a href="/password-reset">Forgot Password</a></small>--}}
                         <small><a href="/register">Sign Up</a></small>
                     </div>
                 </div>

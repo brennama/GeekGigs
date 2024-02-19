@@ -30,11 +30,13 @@ class ProfileController extends Controller
         $user->tags = json_decode($user->tags, true);
         $posts = PostedJob::where('user_id', $user->user_id)->get();
         $saved = SavedJob::where('user_id', $user->user_id)->get();
+        $archives = [];
 
         return view('profile', [
             'user' => $user,
             'posts' => $posts,
             'saved' => $saved,
+            'archives' => $archives,
         ]);
     }
 
@@ -49,11 +51,14 @@ class ProfileController extends Controller
 
         $uri = sprintf('/api/users/%s', Auth::user()->user_id);
         $subRequest = Request::create($uri, 'PUT', $request->request->all());
+        $subRequest->headers->set('Api-Key', config('app.api_key'));
         $response = $this->app->handle($subRequest);
 
         if ($response->getStatusCode() !== 200) {
             // add error message to session
         }
+
+        $request->session()->flash('status', 'Successfully updated profile data.');
 
         return redirect(config('app.url').'/profile');
     }

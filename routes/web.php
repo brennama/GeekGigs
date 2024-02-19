@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Web\AdminController;
 use App\Http\Controllers\Web\ForgotPasswordController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\JobListController;
 use App\Http\Controllers\Web\JobPostController;
+use App\Http\Controllers\Web\JobSaveController;
 use App\Http\Controllers\Web\LoginController;
 use App\Http\Controllers\Web\LogoutController;
 use App\Http\Controllers\Web\ProfileController;
@@ -24,7 +26,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'show']);
 
-Route::get('/jobs', [JobListController::class, 'show']);
+
+Route::get('/jobs', [JobListController::class, 'search']);
+Route::get('/jobs/{jobId}', [JobListController::class, 'show']);
+Route::post('/jobs/save', [JobSaveController::class, 'save']);
+Route::delete('/jobs/save', [JobSaveController::class, 'unsave']);
 
 Route::controller(JobPostController::class)->group(function () {
     $uri = '/post';
@@ -52,6 +58,8 @@ Route::controller(ResetPasswordController::class)->group(function () {
     Route::post('/reset-password', 'submit')
         ->middleware('guest')
         ->name('password.update');
+    Route::put('/reset-password', 'change')
+        ->name('password.change');
 });
 
 Route::controller(LoginController::class)->group(function () {
@@ -70,3 +78,8 @@ Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'show');
     Route::post('/register', 'submit');
 });
+
+//Route::controller(AdminController::class)->group(function () {
+//    Route::get('/admin', 'show');
+//    Route::post('/admin', 'submit');
+//});

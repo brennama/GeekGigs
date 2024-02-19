@@ -9,7 +9,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <form method="post">
+            <form method="post" action="{{ request()->fullUrl() }}">
                 @csrf
                 <div class="mb-3">
                     <label for="email" class="form-label">Email Address</label>

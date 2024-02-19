@@ -1,10 +1,22 @@
 FROM php:8.3-apache
 
-#RUN apt-get update && \
-#    apt-get upgrade -y --no-install-recommends && \
-#    apt-get -y autoremove && \
-#    apt-get clean && \
-#    rm -rf /var/lib/apt/lists/*
+ENV DEPS \
+    git \
+    zip \
+    unzip \
+    ssh \
+    libc-client-dev \
+    libkrb5-dev \
+    libmcrypt-dev \
+    libmemcached-dev \
+    libzip-dev \
+    zlib1g-dev
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends $DEPS && \
+    apt-get -y autoremove && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /var/www/html/geekgigs/public
 
@@ -17,7 +29,6 @@ RUN a2enmod rewrite
 COPY conf/php.ini /usr/local/etc/php/
 
 RUN docker-php-ext-install \
-#    imap \
     mysqli \
     pdo \
     pdo_mysql
@@ -27,3 +38,5 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 RUN usermod -u 48 www-data
 RUN groupmod -g 48 www-data
+
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

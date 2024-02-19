@@ -129,8 +129,14 @@ class JobRepository extends DocumentRepository
      *
      * @return Job[]
      */
-    public function fuzzy(string $term, int $size = 20, int $from = 0): array
-    {
+    public function fuzzy(
+        string $term,
+        int $size = 20,
+        int $from = 0,
+        ?string $jobType = null,
+        ?string $remotePolicy = null,
+        ?string $experienceLevel = null,
+    ): array {
         $response = $this->client->search([
             'index' => 'jobs',
             'from' => $from,
@@ -152,11 +158,7 @@ class JobRepository extends DocumentRepository
                                         'prefix_length' => 2,
                                     ],
                                 ],
-                                'filter' => [
-                                    'term' => [
-                                        'archived' => false,
-                                    ],
-                                ],
+                                'filter' => $this->filter($jobType, $remotePolicy, $experienceLevel),
                             ],
                         ],
                     ],

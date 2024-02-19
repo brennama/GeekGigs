@@ -63,6 +63,9 @@ $experienceLevel = App\Enums\ExperienceLevel::tryFrom(request()->get('experience
                 <form method="get">
                 <h5>Filter Options</h5>
                     <input type="hidden" name="term" value="{{ $term }}">
+                    @if (request()->get('search') === 'fuzzy')
+                    <input type="hidden" name="search" value="fuzzy">
+                    @endif
                     {{-- job type component --}}
                     <div class="mb-2"><x-job-type :selected="$jobType"/></div>
                     {{-- remote policy component --}}

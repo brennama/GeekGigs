@@ -14,7 +14,7 @@ class States extends Component
     public function __construct(
         public int|string|null $tabindex = null,
         public int|string $required = 0,
-        public string $selected = '',
+        public ?string $selected = null,
     ) {
         //
     }

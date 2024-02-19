@@ -92,7 +92,7 @@
                 <div class="mb-3">
                     <label for="experienceLevel" class="form-label">Experience Level</label>
                     {{-- experience level component --}}
-                    <x-experience-level tabindex="10" required="1" :selected="$job->experienceLevel"/>
+                    <x-experience-level tabindex="10" required="1" :selected="$job?->experienceLevel"/>
                 </div>
             </div>
         </div>

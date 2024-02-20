@@ -23,6 +23,9 @@ class DatabaseSeeder extends Seeder
              UserSeeder::class,
              JobSeeder::class,
              TagSeeder::class,
+             PostedJobSeeder::class,
+             SavedJobSeeder::class,
+             ArchivedJobSeeder::class
          ]);
     }
 }

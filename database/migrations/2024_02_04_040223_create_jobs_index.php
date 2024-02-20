@@ -35,6 +35,9 @@ return new class extends Migration
                 ],
                 'mappings' => [
                     'properties' => [
+                        'userId' => [
+                            'type' => 'integer',
+                        ],
                         'title' => [
                             'type' => 'text',
                         ],
@@ -74,6 +77,20 @@ return new class extends Migration
                         'salaryRangeMax' => [
                             'type' => 'integer',
                             'index' => false,
+                        ],
+                        'archived' => [
+                            'type' => 'boolean',
+                        ],
+                        'createdAt' => [
+                            'type' => 'date',
+                            'format' => 'yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis',
+                            'ignore_malformed' => true,
+                        ],
+                        'updatedAt' => [
+                            'type' => 'date',
+                            'format' => 'yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis',
+                            'ignore_malformed' => true,
+                            'null_value' => null,
                         ],
                     ],
                 ],

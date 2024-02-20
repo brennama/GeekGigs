@@ -9,12 +9,23 @@
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
           crossorigin="anonymous">
     @stack('styles')
+    <style>
+        .btn-apply, .btn-remove, .btn-save, .btn-view {
+            --bs-btn-padding-y: .25rem;
+            --bs-btn-padding-x: .5rem;
+            --bs-btn-font-size: .75rem;
+            width: 80px;
+        }
+    </style>
     @stack('head_scripts')
 </head>
 <body>
 <nav class="navbar navbar-expand-lg bg-primary mb-5" data-bs-theme="dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">GeekGigs</a>
+        <a class="navbar-brand" href="/">
+            <img src="/img/logo.svg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+            GeekGigs
+        </a>
         <button class="navbar-toggler"
                 type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarContent"
@@ -25,6 +36,13 @@
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
             <ul class="navbar-nav mb-2 mb-lg-0">
+{{--                @auth--}}
+{{--                    @if (Illuminate\Support\Facades\Auth::user()->isAdmin)--}}
+{{--                        <li class="nav-item">--}}
+{{--                            <a class="nav-link" href="/admin">Admin</a>--}}
+{{--                        </li>--}}
+{{--                    @endif--}}
+{{--                @endauth--}}
                 <li class="nav-item">
                     <a class="nav-link" href="/jobs">Search Jobs</a>
                 </li>

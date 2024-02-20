@@ -32,6 +32,19 @@ class UserSeeder extends Seeder
                 ['id' => 63, 'label' => 'docker'],
                 ['id' => 90, 'label' => 'apache'],
             ]),
+            'isAdmin' => true,
+            'created_at' => date('Y-m-d H:i:s')
+        ]);
+
+        User::insert([
+            'first_name' => 'test',
+            'last_name' => 'user',
+            'email' => 'geekgigsapp@gmail.com',
+            'password' => Hash::make('password'),
+            'remember_token' => Str::random(10),
+            'tags' => json_encode([]),
+            'isAdmin' => true,
+            'created_at' => date('Y-m-d H:i:s')
         ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 
 /**
  * Class StoreUserRequest
@@ -16,7 +17,7 @@ class StoreUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return true; // registration
     }
 
     /**
@@ -30,8 +31,14 @@ class StoreUserRequest extends FormRequest
             'first_name' => ['required', 'max:50'],
             'last_name' => ['required', 'max:50'],
             'email' => ['required', 'email'],
-            'password' => ['required'],
-            'tags' => ['nullable'],
+            'password' => [
+                'required',
+                'confirmed',
+                Password::min(8)
+                    ->numbers()
+                    ->letters()
+                   // ->uncompromised(),
+            ],
         ];
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Password;
 
 /**
  * Class UpdateUserRequest
@@ -16,7 +18,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return Auth::check();
     }
 
     /**
@@ -30,7 +32,6 @@ class UpdateUserRequest extends FormRequest
             'first_name' => ['nullable', 'max:50'],
             'last_name' => ['nullable', 'max:50'],
             'email' => ['nullable', 'email'],
-            //'password' => ['required'],
             'tags' => ['nullable', 'json'],
         ];
     }

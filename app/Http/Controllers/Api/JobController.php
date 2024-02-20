@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\ExperienceLevel;
+use App\Enums\JobType;
+use App\Enums\RemotePolicy;
 use App\Http\Requests\StoreJobRequest;
+use App\Http\Requests\UpdateJobRequest;
 use App\Models\Job;
 use App\Models\PostedJob;
 use App\Models\SavedJob;
@@ -40,8 +44,18 @@ class JobController extends Controller
      */
     public function search(Request $request): JsonResponse
     {
-        $results = $this->repository->search(
+        $request->validate(['term' => ['required']]);
+
+        $method = strtolower($request->get('search', 'search'));
+        $method = $method === 'fuzzy' ? 'fuzzy' : 'search';
+
+        $results = $this->repository->{$method}(
             $request->query->get('term'),
+            $request->query->get('limit', 20),
+            $request->query->get('offset', 0),
+            $request->query->get('jobType'),
+            $request->query->get('remotePolicy'),
+            $request->query->get('experienceLevel'),
         );
 
         return response()->json($results);
@@ -64,7 +78,10 @@ class JobController extends Controller
                 'job_title' => $job->title,
             ]);
         } catch (Throwable) {
-            return response()->json(status: 500);
+            return response()->json([
+                'message' => 'Internal Server Error.',
+                'status' => 500,
+            ], 500);
         }
 
         return response()->json($job);
@@ -78,7 +95,10 @@ class JobController extends Controller
         $job = $this->repository->find($id);
 
         if ($job === null) {
-            return response()->json(status: 404);
+            return response()->json([
+                'message' => 'Not Found',
+                'status' => 404,
+            ], 404);
         }
 
         return response()->json($job);
@@ -87,10 +107,42 @@ class JobController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): JsonResponse
+    public function update(UpdateJobRequest $request): JsonResponse
     {
-        // Add functionality to update jobs
-        return response()->json();
+        $validated = $request->validated();
+        $job = $this->repository->find($request->request->get('job_id'));
+
+        if ($job === null) {
+            return response()->json([
+                'message' => 'Not Found',
+                'status' => 404,
+            ], 404);
+        }
+
+        $job->title = $validated['title'];
+        $job->company = $validated['company'];
+        $job->companyUrl = $validated['companyUrl'];
+        $job->jobUrl = $validated['jobUrl'];
+        $job->description = $validated['description'];
+        $job->city = $validated['city'];
+        $job->state = $validated['state'];
+        $job->remotePolicy = RemotePolicy::from($validated['remotePolicy']);
+        $job->experienceLevel = ExperienceLevel::from($validated['experienceLevel']);
+        $job->jobType = JobType::from($validated['jobType']);
+        $job->salaryRangeMin = (int) $validated['salaryRangeMin'];
+        $job->salaryRangeMax = (int) $validated['salaryRangeMax'];
+        $job->tags = json_decode($validated['tags'], true);
+
+        try {
+            $this->repository->update($job);
+        } catch (Throwable) {
+            return response()->json([
+                'message' => 'Internal Server Error.',
+                'status' => 500,
+            ], 500);
+        }
+
+        return response()->json($job);
     }
 
     /**

@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUserRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 /**
@@ -20,8 +24,23 @@ class RegisterController extends Controller
         return view('register');
     }
 
-    public function submit()
+    /**
+     * Create user from form.
+     */
+    public function submit(StoreUserRequest $request): RedirectResponse
     {
+        $request->validated();
+        $subRequest = Request::create('/api/users', 'POST', $request->request->all());
+        $subRequest->headers->set('Api-Key', config('app.api_key'));
+        $response = $this->app->handle($subRequest);
+        $decoded = json_decode($response->getContent(), true);
 
+        if ($response->getStatusCode() !== 200) {
+            return back()->withErrors($decoded['message'])->withInput();
+        }
+
+        Auth::loginUsingId($decoded['user_id']);
+
+        return redirect(config('app.url'));
     }
 }

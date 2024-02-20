@@ -46,34 +46,127 @@ class JobRepository extends DocumentRepository
      *
      * @return Job[]
      */
-    public function search(string $term): array
+    public function search(
+        string $term,
+        int $size = 20,
+        int $from = 0,
+        ?string $jobType = null,
+        ?string $remotePolicy = null,
+        ?string $experienceLevel = null,
+    ): array
     {
         $response = $this->client->search([
             'index' => 'jobs',
+            'from' => $from,
+            'size' => $size,
             'body' => [
                 'query' => [
-                    'multi_match' => [
-                        'query' => $term,
-                        'fields' => [
-                            'tags.label^3',
-                            'title^2',
-                            'description',
+                    'bool' => [
+                        'must' => [
+                            'multi_match' => [
+                                'query' => $term,
+                                'fields' => [
+                                    'tags.label^3',
+                                    'title^2',
+                                    'description',
+                                ],
+                            ],
+                        ],
+                        'filter' => $this->filter($jobType, $remotePolicy, $experienceLevel),
+                    ],
+                ],
+            ],
+        ]);
+
+        return $this->decode($response)['hits'];
+    }
+
+    /**
+     * Create filter for query.
+     */
+    private function filter(
+        ?string $jobType,
+        ?string $remotePolicy,
+        ?string $experienceLevel,
+    ): array {
+        $params = [
+           [
+               'term' => [
+                   'archived' => false,
+               ],
+           ],
+        ];
+
+        if ($jobType !== null) {
+            $params[] = [
+                'term' => [
+                    'jobType' => $jobType,
+                ],
+            ];
+        }
+
+        if ($remotePolicy !== null) {
+            $params[] = [
+                'term' => [
+                    'remotePolicy' => $remotePolicy,
+                ],
+            ];
+        }
+
+        if ($experienceLevel !== null) {
+            $params[] = [
+                'term' => [
+                    'experienceLevel' => $experienceLevel,
+                ],
+            ];
+        }
+
+        return $params;
+    }
+
+    /**
+     * Fuzzy search for documents.
+     *
+     * @return Job[]
+     */
+    public function fuzzy(
+        string $term,
+        int $size = 20,
+        int $from = 0,
+        ?string $jobType = null,
+        ?string $remotePolicy = null,
+        ?string $experienceLevel = null,
+    ): array {
+        $response = $this->client->search([
+            'index' => 'jobs',
+            'from' => $from,
+            'size' => $size,
+            'body' => [
+                'query' => [
+                    'function_score' => [
+                        'query' => [
+                            'bool' => [
+                                'must' => [
+                                    'multi_match' => [
+                                        'query' => $term,
+                                        'fields' => [
+                                            'tags.label^3',
+                                            'title^2',
+                                            'description',
+                                        ],
+                                        'fuzziness' => 'AUTO',
+                                        'prefix_length' => 2,
+                                    ],
+                                ],
+                                'filter' => $this->filter($jobType, $remotePolicy, $experienceLevel),
+                            ],
                         ],
                     ],
                 ],
             ],
         ]);
 
-        $decoded = $this->decode($response);
-
-        $results = [];
-        foreach ($decoded['hits']['hits'] as $hit) {
-            $source = $hit['_source'];
-            $source['id'] = $hit['_id'];
-            $results[] = Job::fromArray($source);
-        }
-
-        return $results;
+        return $this->decode($response)['hits'];
     }
 
     /**
@@ -83,12 +176,33 @@ class JobRepository extends DocumentRepository
      */
     public function save(Job $model): void
     {
-        $response = $this->client->index([
+        $params = [
             'index' => 'jobs',
             'body' => $model->toArray(),
-        ]);
+        ];
 
+        if (!empty($model->id)) {
+            $params['id'] = $model->id;
+        }
+
+        $response = $this->client->index($params);
         $decoded = $this->decode($response);
         $model->id = $decoded['_id'];
+    }
+
+    /**
+     * Update document.
+     *
+     * @throws Throwable
+     */
+    public function update(Job $model): void
+    {
+        $this->client->update([
+            'index' => 'jobs',
+            'id' => $model->id,
+            'body' => [
+                'doc' => $model->toArray(),
+            ],
+        ]);
     }
 }

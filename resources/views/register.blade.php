@@ -16,19 +16,32 @@
     </div>
     <div class="row">
         <div class="col">
-            <form method="post" id="register-form">
+            <form method="post" id="register-form" action="{{ request()->fullUrl() }}">
                 @csrf
                 <div class="mb-3">
                     <label for="first_name" class="form-label">First Name</label>
-                    <input type="text" class="form-control" id="first_name" name="first_name">
+                    <input type="text"
+                           class="form-control"
+                           id="first_name"
+                           name="first_name"
+                           value="{{ old('first_name') }}">
                 </div>
                 <div class="mb-3">
-                    <label for="first_name" class="form-label">Last Name</label>
-                    <input type="text" class="form-control" id="last_name" name="last_name">
+                    <label for="last_name" class="form-label">Last Name</label>
+                    <input type="text"
+                           class="form-control"
+                           id="last_name"
+                           name="last_name"
+                           value="{{ old('last_name') }}">
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+                    <input type="email"
+                           class="form-control"
+                           id="email"
+                           name="email"
+                           value="{{ old('email') }}"
+                           aria-describedby="emailHelp">
                     <div id="emailHelp" class="form-text">
                         <small>We'll never share your email with anyone else.</small>
                     </div>

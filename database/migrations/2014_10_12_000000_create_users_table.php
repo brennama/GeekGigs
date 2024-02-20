@@ -29,6 +29,7 @@ return new class extends Migration
             $table->json('education')->nullable();
             $table->json('experience')->nullable();
             $table->json('tags')->nullable();
+            $table->boolean('isAdmin')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

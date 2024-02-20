@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use App\Enums\ExperienceLevel;
+use App\Enums\ExperienceLevel as Exp;
 use App\Enums\JobType;
 use App\Enums\RemotePolicy;
+use DateTimeInterface;
+use DateTime;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Throwable;
@@ -23,6 +25,11 @@ class Job implements Arrayable, Jsonable
      * it has been indexed in elasticsearch.
      */
     public ?string $id = null;
+
+    /**
+     * User identifier.
+     */
+    public int $userId;
 
     /**
      * Company name.
@@ -67,7 +74,7 @@ class Job implements Arrayable, Jsonable
     /**
      * Job required experience level.
      */
-    public ExperienceLevel $experienceLevel;
+    public Exp $experienceLevel;
 
     /**
      * Job type.
@@ -90,11 +97,23 @@ class Job implements Arrayable, Jsonable
     public string|array|null $tags = null;
 
     /**
+     * Whether job has been archived.
+     */
+    public bool $archived = false;
+
+    public DateTimeInterface $createdAt;
+    public ?DateTimeInterface $updatedAt = null;
+
+    /**
      * Cast object to array.
      */
     public function toArray(): array
     {
-        return (array) $this;
+        $arr = (array) $this;
+        $arr['createdAt'] = $this->createdAt->format('Y-m-d H:i:s');
+        $arr['updatedAt'] = $this->updatedAt?->format('Y-m-d H:i:s');
+
+        return $arr;
     }
 
     /**
@@ -114,19 +133,23 @@ class Job implements Arrayable, Jsonable
     {
         $self = new static();
         $self->id = $values['_id'] ?? $values['id'] ?? null;
-        $self->company = $values['company'];
+        $self->userId = $values['user_id'] ?? $values['userId'] ?? null;
+        $self->company = $values['company'] ?? null;
         $self->companyUrl = $values['companyUrl'] ?? null;
-        $self->jobUrl = $values['jobUrl'];
-        $self->title = $values['title'];
+        $self->jobUrl = $values['jobUrl'] ?? null;
+        $self->title = $values['title'] ?? null;
         $self->description = $values['description'] ?? null;
-        $self->city = $values['city'];
-        $self->state = $values['state'];
-        $self->salaryRangeMin = $values['salaryRangeMin'];
-        $self->salaryRangeMax = $values['salaryRangeMax'];
-        $self->tags = $values['tags'] ?? null;
-        $self->remotePolicy = RemotePolicy::tryFrom($values['remotePolicy']) ?? RemotePolicy::OnSite;
-        $self->experienceLevel = ExperienceLevel::tryFrom($values['experienceLevel']) ?? ExperienceLevel::MidLevel;
-        $self->jobType = JobType::tryFrom($values['jobType']) ?? JobType::FullTime;
+        $self->city = $values['city'] ?? '';
+        $self->state = $values['state'] ?? '';
+        $self->salaryRangeMin = $values['salaryRangeMin'] ?? 0;
+        $self->salaryRangeMax = $values['salaryRangeMax'] ?? 0;
+        $self->remotePolicy = RemotePolicy::tryFrom($values['remotePolicy'] ?? null) ?? RemotePolicy::OnSite;
+        $self->experienceLevel = Exp::tryFrom($values['experienceLevel'] ?? null) ?? Exp::MidLevel;
+        $self->jobType = JobType::tryFrom($values['jobType'] ?? null) ?? JobType::FullTime;
+        $self->archived = $values['archived'] ?? false;
+        $self->tags = $values['tags'] ?? '[]';
+        $self->createdAt = !empty($values['createdAt']) ? new DateTime($values['createdAt']) : new DateTime();
+        $self->updatedAt = !empty($values['updatedAt']) ? new DateTime($values['updatedAt']) : null;
 
         return $self;
     }

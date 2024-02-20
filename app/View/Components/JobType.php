@@ -2,17 +2,21 @@
 
 namespace App\View\Components;
 
+use App\Enums\JobType as JT;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class Tags extends Component
+class JobType extends Component
 {
     /**
      * Create a new component instance.
      */
-    public function __construct(public ?array $tags = null, public int|string|null $tabindex = null)
-    {
+    public function __construct(
+        public int|string|null $tabindex = null,
+        public int|string $required = 0,
+        public ?JT $selected = null,
+    ) {
         //
     }
 
@@ -21,6 +25,6 @@ class Tags extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.tags');
+        return view('components.job-type');
     }
 }

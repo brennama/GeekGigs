@@ -135,6 +135,14 @@ class JobController extends Controller
 
         try {
             $this->repository->update($job);
+
+            PostedJob::where('user_id', $job->userId)
+                ->where('job_id', $job->id)
+                ->update(['job_title' => $job->title]);
+
+            SavedJob::where('job_id', $job->id)
+                ->update(['job_title' => $job->title]);
+
         } catch (Throwable) {
             return response()->json([
                 'message' => 'Internal Server Error.',

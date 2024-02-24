@@ -113,7 +113,7 @@
                 <button type="submit"
                         class="btn {{ $job?->archived ? 'btn-outline-danger' : 'btn-primary' }}"
                         tabindex="14">
-                    {{ $job?->archived ? 'Post as New Job' : ($job?->id ? 'Save' : 'Post') }} Job
+                    {{ $job?->archived ? 'Post as New' : ($job?->id ? 'Save' : 'Post') }} Job
                 </button>
                 @if (!empty($job?->archived))
                     <a href="{{ str_replace('/api', '', request()->getRequestUri()) }}"

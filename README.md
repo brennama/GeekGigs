@@ -4,6 +4,27 @@ MET CSS 633
 GeekGigs Web Application
 ------------------------
 
+GeekGigs is a web-based application that provides users with a rich interface and powerful searching capabilities, and allows for the filtering of search results by various criteria such as job type, remote policy, and experience level. The application also supports the posting and tagging job openings, making it possible to search for jobs based on specific technologies.
+
+This project was built in six weeks as a term project for CS633 at Boston University.
+
+Our team was:
+
+Brenna Mahn
+Software Engineer, UX Engineer
+
+Brett Gorden
+Software Engineer
+
+Yanyan Zhang
+Project Manager
+
+Lin Mu
+Test Expert
+
+
+How to Set Up:
+
 ## Setting Up Your Dev Environment (Mac Only)
 
 ### Install Docker Desktop

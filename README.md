@@ -10,20 +10,19 @@ This project was built in six weeks as a term project for CS633 at Boston Univer
 
 Our team was:
 
-Brenna Mahn
+Brenna Mahn:
 Software Engineer, UX Engineer
 
-Brett Gorden
+Brett Gorden:
 Software Engineer
 
-Yanyan Zhang
+Yanyan Zhang:
 Project Manager
 
-Lin Mu
+Lin Mu:
 Test Expert
 
 
-How to Set Up:
 
 ## Setting Up Your Dev Environment (Mac Only)
 
